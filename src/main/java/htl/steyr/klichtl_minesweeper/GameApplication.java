@@ -11,7 +11,7 @@ import java.io.IOException;
 public class GameApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(GameApplication.class.getResource("menu-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(GameApplication.class.getResource("home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Minesweeper");
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Minesweeper-Icon.png")));
