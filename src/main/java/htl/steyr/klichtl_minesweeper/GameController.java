@@ -1,6 +1,5 @@
 package htl.steyr.klichtl_minesweeper;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,29 +18,43 @@ public class GameController implements Initializable {
     @FXML
     public ChoiceBox<String> chosenDifficulty;
 
+    public Integer ROWS;
+    public Integer COLS;
+    public Integer MINES;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        chosenDifficulty.setItems(FXCollections.observableArrayList("Beginner", "Advanced", "Professional"));
-        chosenDifficulty.setValue("Beginner");
+        if (chosenDifficulty != null) {
+            chosenDifficulty.getItems().addAll("Beginner", "Advanced", "Professional");
+            chosenDifficulty.setValue("Beginner");
+        }
     }
 
     public String getDifficulty() {
-        String difficultyPath = "";
-
         String difficulty = chosenDifficulty.getValue();
+        String difficultyPath = "";
 
         switch (difficulty) {
             case "Beginner":
                 difficultyPath = "/htl/steyr/klichtl_minesweeper/difficultys/beginner-Grid-view.fxml";
+                    ROWS = 8;
+                    COLS = 8;
+                    MINES = 10;
                 break;
             case "Advanced":
                 difficultyPath = "/htl/steyr/klichtl_minesweeper/difficultys/advanced-Grid-view.fxml";
+                    ROWS = 16;
+                    COLS = 16;
+                    MINES = 40;
                 break;
             case "Professional":
                 difficultyPath = "/htl/steyr/klichtl_minesweeper/difficultys/professional-Grid-view.fxml";
+                    ROWS = 16;
+                    COLS = 30;
+                    MINES = 99;
                 break;
             default:
-                throw new IllegalStateException("Error loading Difficulty");
+                throw new IllegalArgumentException("Error loading Difficulty");
         }
 
         return difficultyPath;
