@@ -1,12 +1,10 @@
 package htl.steyr.klichtl_minesweeper;
 
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,13 +15,13 @@ public class ButtonController implements Initializable {
     public Label info_Label;
     public Button button;
 
-    private boolean is_A_Bomb = false;
-    private boolean is_Marked = false;
-    private boolean is_Revealed = false;
+    private Boolean is_A_Bomb = false;
+    private Boolean is_Marked = false;
+    private Boolean is_Revealed = false;
     private Integer bombs_Nearby = 0;
 
-    private int col = -1; // ??
-    private int row = -1; // ??
+    private Integer COL = -1;
+    private Integer ROW = -1;
 
     private GameController controller;
 
@@ -35,7 +33,7 @@ public class ButtonController implements Initializable {
         }
     }
 
-    public void buttonClicked(MouseEvent mouseEvent) {
+    public void buttonClicked(MouseEvent mouseEvent) throws BombException {
 
         if (mouseEvent != null) {
 
@@ -50,21 +48,23 @@ public class ButtonController implements Initializable {
             } else if (mouseEvent.getButton() == MouseButton.PRIMARY && !is_Marked) {
                 reveal();
             }
-
         } else {
             reveal();
         }
     }
 
-    public void reveal() {
+    public void reveal() throws BombException {
 
-    }
+        is_Revealed = true;
+        button.setVisible(true);
 
-
-
-    public void setPosition(int col, int row) {
-        this.col = col;
-        this.row = row;
+        if (is_A_Bomb) {
+            throw new BombException();
+        } else {
+            if (getBombs_Nearby() == 0) {
+                controller.revealFields(COL, ROW);
+            }
+        }
     }
 
     public boolean isBomb() {
@@ -73,11 +73,10 @@ public class ButtonController implements Initializable {
 
     public void setBomb(boolean bomb) {
         this.is_A_Bomb = bomb;
-
         bomb_Label.setVisible(bomb);
     }
 
-    public void setBombsNearby(int num) {
+    public void setBombs_Nearby(int num) {
         this.bombs_Nearby = num;
 
         if (!isBomb()) {
@@ -88,18 +87,15 @@ public class ButtonController implements Initializable {
         }
     }
 
-    public int getBombsNearby() {
+    public Integer getBombs_Nearby() {
         return bombs_Nearby;
     }
 
-    public boolean isRevealed() {
+    public Boolean isRevealed() {
         return is_Revealed;
     }
 
     public void setController(GameController controller) {
         this.controller = controller;
     }
-
-
-
 }
