@@ -1,8 +1,8 @@
 package htl.steyr.klichtl_minesweeper;
 
-public class BombException extends Exception {
+public class MineException extends Exception {
 
-    public BombException() {
+    public MineException() {
         super("You have clicked on a Mine :(");
     }
 

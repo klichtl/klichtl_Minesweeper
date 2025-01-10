@@ -2,13 +2,12 @@ package htl.steyr.klichtl_minesweeper;
 
 public class DifficultySettings {
 
-    public String path_To_Fxml;
+
     public Integer ROWS;
     public Integer COLS;
     public Integer MINES;
 
-    public DifficultySettings(String path_To_Fxml, int ROWS, int COLS, int MINES) {
-        this.path_To_Fxml = path_To_Fxml;
+    public DifficultySettings( int ROWS, int COLS, int MINES) {
         this.ROWS = ROWS;
         this.COLS = COLS;
         this.MINES = MINES;
@@ -26,7 +25,4 @@ public class DifficultySettings {
         return ROWS;
     }
 
-    public String getPath_To_Fxml() {
-        return path_To_Fxml;
-    }
 }
