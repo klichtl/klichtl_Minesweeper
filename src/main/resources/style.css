@@ -2,3 +2,8 @@
     -fx-border-width: 2px;
     -fx-border-color: lightgrey;
 }
+
+.center-label {
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}

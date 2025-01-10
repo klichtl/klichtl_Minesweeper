@@ -53,6 +53,7 @@ public class GameController implements Initializable {
         Grid.getColumnConstraints().clear();
 
         getDifficulty();
+        setEvenSize();
 
         /* fill every field with a button depending on the difficulty selected */
         for (Integer col = 0; col < COLS; ++col) {
@@ -156,6 +157,23 @@ public class GameController implements Initializable {
             }
         }
         return bombsNearby;
+    }
+
+    public void setEvenSize() {
+
+        /* give every Row the same space */
+        for (Integer row = 0; row < ROWS; row++) {
+            RowConstraints rowConstraints = new RowConstraints();
+            rowConstraints.setPercentHeight(100.0 / ROWS);
+            Grid.getRowConstraints().add(rowConstraints);
+        }
+
+        /* give every Colum the same space */
+        for (Integer col = 0; col < COLS; col++) {
+            ColumnConstraints colConstraints = new ColumnConstraints();
+            colConstraints.setPercentWidth(100.0 / COLS);
+            Grid.getColumnConstraints().add(colConstraints);
+        }
     }
 
     public DifficultySettings getDifficulty() {

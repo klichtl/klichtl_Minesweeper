@@ -53,18 +53,20 @@ public class ButtonController implements Initializable {
     }
 
     public void reveal() throws MineException {
-
         is_Revealed = true;
-        button.setVisible(true);
+        button.setVisible(false);
 
         if (isMine()) {
+            mine_Label.setVisible(true);
             throw new MineException();
         } else {
+            info_Label.setVisible(true);
             if (getMines_Nearby() == 0) {
                 controller.revealFields(COL, ROW);
             }
         }
     }
+
 
     public boolean isMine() {
         return is_A_Mine;
