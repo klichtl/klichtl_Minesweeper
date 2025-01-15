@@ -5,7 +5,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 
 import java.io.IOException;
@@ -21,17 +23,23 @@ public class GameController implements Initializable {
     public GridPane Grid;
     @FXML
     public ChoiceBox<String> chosenDifficulty;
+    @FXML
+    public TextField MinesRemaining;
 
     public Integer ROWS;
     public Integer COLS;
     public Integer MINES;
 
+    public Integer fieldsMarked = 0;
+
+    ButtonController buttonController = new ButtonController();
+
     /* HashMap with the difficulty and the DifficultySettings to store information about the difficulty */
 
     public HashMap<String, DifficultySettings> difficultys = new HashMap<>() {{
-        put("Beginner", new DifficultySettings(8,12,15));
-        put("Advanced", new DifficultySettings(16,24,35));
-        put("Professional", new DifficultySettings(20,30,120));
+        put("Beginner", new DifficultySettings(8, 12, 15));
+        put("Advanced", new DifficultySettings(16, 24, 35));
+        put("Professional", new DifficultySettings(20, 30, 120));
     }};
 
     @Override
@@ -54,16 +62,19 @@ public class GameController implements Initializable {
 
         getDifficulty();
         setEvenSize();
+        setFieldsMarked(0);
 
         /* fill every field with a button depending on the difficulty selected */
         for (Integer col = 0; col < COLS; ++col) {
             for (Integer row = 0; row < ROWS; ++row) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("button-view.fxml"));
                 Pane buttonPane = loader.load();
-                ButtonController controller = loader.getController();
-                controller.setController(this);
+                buttonController = loader.getController();
+                buttonController.setController(this);
 
-                buttonPane.setUserData(controller);
+                buttonController.setCoordinates(col, row);
+
+                buttonPane.setUserData(buttonController);
 
                 Grid.add(buttonPane, col, row);
             }
@@ -82,16 +93,19 @@ public class GameController implements Initializable {
             /* set a mine, only if there is not an existing mine under the button */
             if (!placedMines.contains(coordinates)) {
                 placedMines.add(coordinates);
-                ButtonController controller = getController(randomCOL, randomROW);
-                controller.setMine(true);
+                buttonController = getController(randomCOL, randomROW);
+                if (buttonController != null) {
+                    buttonController.setMine(true);
+                }
+
                 ++mineCount;
             }
         }
 
         for (Integer col = 0; col < COLS; ++col) {
             for (Integer row = 0; row < ROWS; ++row) {
-                ButtonController controller = getController(col, row);
-                controller.setMines_Nearby(getMines_Near_Position(col, row));
+                buttonController = getController(col, row);
+                buttonController.setMines_Nearby(getMines_Near_Position(col, row));
             }
         }
     }
@@ -104,24 +118,17 @@ public class GameController implements Initializable {
 
             for (Integer row = (-1); row <= 1; ++row) {
 
-                if (row != 0 || col != 0) {
+                if (COL + col >= 0 && COL + col < COLS && ROW + row >= 0 && ROW + row < ROWS) {
+                    buttonController = getController(COL + col, ROW + row);
 
-                    /* Get the controller from the surrounding fields */
-                    ButtonController controller = getController(COL + col, ROW + row);
-
-                    if (controller != null && !controller.isRevealed() && !controller.isMine()) {
-
-                        /* 1. reveal the field */
-
+                    if (buttonController != null && !buttonController.isRevealed() && !buttonController.isMine()) {
                         try {
-                            controller.reveal();
+                            buttonController.reveal();
                         } catch (MineException e) {
-                            throw new RuntimeException(e);
+                            System.out.println("Game Over! Mine found at: " + COL + " | " + ROW);
                         }
 
-                        /* 2. if there are no mines nearby, call the function recursive */
-
-                        if (controller.getMines_Nearby() == 0) {
+                        if (buttonController.getMines_Nearby() == 0) {
                             revealFields(COL + col, ROW + row);
                         }
                     }
@@ -139,24 +146,26 @@ public class GameController implements Initializable {
         return null;
     }
 
-
     public int getMines_Near_Position(int COL, int ROW) {
 
-        int bombsNearby = 0;
+        int minesNearby = 0;
 
         for (Integer col = (-1); col <= 1; ++col) {
             for (Integer row = (-1); row <= 1; ++row) {
                 if (col != 0 || row != 0) {
                     /* Get the controller from the surrounding fields */
-                    ButtonController controller = getController(COL + col, ROW + row);
+                    buttonController = getController(COL + col, ROW + row);
 
-                    if (controller != null && controller.isMine()) {
-                        ++bombsNearby;
+                    if (buttonController != null && buttonController.isMine()) {
+                        ++minesNearby;
                     }
                 }
             }
         }
-        return bombsNearby;
+
+
+
+        return minesNearby;
     }
 
     public void setEvenSize() {
@@ -188,5 +197,18 @@ public class GameController implements Initializable {
             throw new IllegalArgumentException("Error loading Difficulty");
         }
         return settings;
+    }
+
+    public int getFieldsMarked() {
+        return fieldsMarked;
+    }
+
+    public void setFieldsMarked(int fieldsMarked) {
+        this.fieldsMarked = fieldsMarked;
+        updateFlagsRemaining();
+    }
+
+    private void updateFlagsRemaining() {
+        MinesRemaining.setText("Flags remaining: " + (MINES - fieldsMarked));
     }
 }

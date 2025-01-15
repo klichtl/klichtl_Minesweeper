@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="475.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="htl.steyr.klichtl_minesweeper.GameController">
     <children>
-        <TextField editable="false" focusTraversable="false" layoutX="14.0" layoutY="14.0" prefHeight="40.0" prefWidth="164.0" text="Bombs remaining:" />
+        <TextField fx:id="MinesRemaining" editable="false" focusTraversable="false" layoutX="14.0" layoutY="14.0" prefHeight="40.0" prefWidth="164.0" text="Mines remaining:" />
         <Button focusTraversable="false" layoutX="547.0" layoutY="346.0" mnemonicParsing="false" onAction="#onStartButtonClicked" prefHeight="40.0" prefWidth="164.0" text="Start/Restart" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="16.0" />
         <GridPane fx:id="Grid" layoutX="14.0" layoutY="61.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../style.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="186.0" AnchorPane.topAnchor="61.0">
             <columnConstraints>

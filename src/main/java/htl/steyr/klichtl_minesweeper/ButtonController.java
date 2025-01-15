@@ -1,5 +1,6 @@
 package htl.steyr.klichtl_minesweeper;
 
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,8 +21,8 @@ public class ButtonController implements Initializable {
     private Boolean is_Revealed = false;
     private Integer mines_Nearby = 0;
 
-    private Integer COL = -1;
-    private Integer ROW = -1;
+    private Integer COL;
+    private Integer ROW;
 
     private GameController controller;
 
@@ -34,15 +35,16 @@ public class ButtonController implements Initializable {
     }
 
     public void buttonClicked(MouseEvent mouseEvent) throws MineException {
-
         if (mouseEvent != null) {
             if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-                if (!is_Marked) {
+                if (!is_Marked && controller.getFieldsMarked() < controller.MINES) {
                     is_Marked = true;
                     button.setText("🚩");
-                } else {
+                    controller.setFieldsMarked(controller.getFieldsMarked() + 1);
+                } else if (is_Marked) {
                     is_Marked = false;
                     button.setText("");
+                    controller.setFieldsMarked(controller.getFieldsMarked() - 1);
                 }
             } else if (mouseEvent.getButton() == MouseButton.PRIMARY && !is_Marked) {
                 reveal();
@@ -67,7 +69,6 @@ public class ButtonController implements Initializable {
         }
     }
 
-
     public boolean isMine() {
         return is_A_Mine;
     }
@@ -83,7 +84,6 @@ public class ButtonController implements Initializable {
         if (!isMine()) {
             mine_Label.setVisible(false);
             info_Label.setVisible(true);
-
             info_Label.setText(Integer.toString(mines_Nearby));
         }
     }
@@ -98,5 +98,10 @@ public class ButtonController implements Initializable {
 
     public void setController(GameController controller) {
         this.controller = controller;
+    }
+
+    public void setCoordinates(int col, int row) {
+        this.COL = col;
+        this.ROW = row;
     }
 }
