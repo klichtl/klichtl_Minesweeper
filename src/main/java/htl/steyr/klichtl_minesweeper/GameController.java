@@ -1,5 +1,7 @@
 package htl.steyr.klichtl_minesweeper;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,12 +28,18 @@ public class GameController implements Initializable {
     public ChoiceBox<String> chosenDifficulty;
     @FXML
     public TextField MinesRemaining;
+    @FXML
+    public TextField TimeElapsed;
+
+    private Timeline timeline;
 
     public Integer ROWS;
     public Integer COLS;
     public Integer MINES;
 
     public Integer fieldsMarked = 0;
+
+    public Integer secondsElapsed = 0;
 
     ButtonController buttonController = new ButtonController();
 
@@ -63,6 +72,7 @@ public class GameController implements Initializable {
         getDifficulty();
         setEvenSize();
         setFieldsMarked(0);
+        Timer();
 
         /* fill every field with a button depending on the difficulty selected */
         for (Integer col = 0; col < COLS; ++col) {
@@ -163,7 +173,19 @@ public class GameController implements Initializable {
             }
         }
 
-
+//        if (buttonController != null && buttonController.info_Label != null) {
+//            switch (minesNearby) {
+//                case 1:
+//                    buttonController.info_Label.setStyle("-fx-text-fill: blue");
+//                    break;
+//                case 2:
+//                    buttonController.info_Label.setStyle("-fx-text-fill: green");
+//                    break;
+//                case 3:
+//                    buttonController.info_Label.setStyle("-fx-text-fill: red");
+//                    break;
+//            }
+//        }
 
         return minesNearby;
     }
@@ -208,7 +230,20 @@ public class GameController implements Initializable {
         updateFlagsRemaining();
     }
 
-    private void updateFlagsRemaining() {
+    public void updateFlagsRemaining() {
         MinesRemaining.setText("Flags remaining: " + (MINES - fieldsMarked));
+    }
+
+    public void Timer() {
+        if (timeline == null) { // Überprüfen, ob die Timeline bereits existiert
+            timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                secondsElapsed++;
+                TimeElapsed.setText("Time elapsed: " + secondsElapsed + "s");
+            }));
+
+            /* repeat timeless amounts */
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
+        }
     }
 }

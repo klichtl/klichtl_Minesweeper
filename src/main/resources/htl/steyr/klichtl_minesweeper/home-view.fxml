@@ -20,7 +20,7 @@
                 <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
-        <TextField editable="false" focusTraversable="false" layoutX="189.0" layoutY="14.0" prefHeight="40.0" prefWidth="164.0" text="Time:" />
+        <TextField fx:id="TimeElapsed" editable="false" focusTraversable="false" layoutX="189.0" layoutY="14.0" prefHeight="40.0" prefWidth="164.0" text="Time elapsed:" />
         <ChoiceBox fx:id="chosenDifficulty" focusTraversable="false" layoutX="620.0" layoutY="14.0" prefHeight="40.0" prefWidth="164.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="14.0" />
     </children>
 </AnchorPane>
