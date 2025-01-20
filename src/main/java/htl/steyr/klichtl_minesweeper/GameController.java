@@ -1,5 +1,6 @@
 package htl.steyr.klichtl_minesweeper;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -7,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -51,6 +51,19 @@ public class GameController implements Initializable {
         put("Professional", new DifficultySettings(20, 30, 120));
     }};
 
+    /* Hashmap with the different colours depending on the minesNearby */
+
+    public HashMap<Integer, String> mineColours = new HashMap<>() {{
+        put(1, "#0000FF");  // Blue
+        put(2, "#008000");  // Green
+        put(3, "#FF0000");  // Red
+        put(4, "#000080");  // dark Blue
+        put(5, "#800000");  // dark Red
+        put(6, "#008080");  // Cyan
+        put(7, "#000000");  // Black
+        put(8, "#808080");  // Grey
+    }};
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (chosenDifficulty != null) {
@@ -69,10 +82,12 @@ public class GameController implements Initializable {
         Grid.getRowConstraints().clear();
         Grid.getColumnConstraints().clear();
 
+        secondsElapsed = 0;
+        Timer();
+
         getDifficulty();
         setEvenSize();
         setFieldsMarked(0);
-        Timer();
 
         /* fill every field with a button depending on the difficulty selected */
         for (Integer col = 0; col < COLS; ++col) {
@@ -157,38 +172,36 @@ public class GameController implements Initializable {
     }
 
     public int getMines_Near_Position(int COL, int ROW) {
-
         int minesNearby = 0;
 
+        // Schleife über benachbarte Felder
         for (Integer col = (-1); col <= 1; ++col) {
             for (Integer row = (-1); row <= 1; ++row) {
                 if (col != 0 || row != 0) {
-                    /* Get the controller from the surrounding fields */
-                    buttonController = getController(COL + col, ROW + row);
+                    ButtonController neighborController = getController(COL + col, ROW + row);
 
-                    if (buttonController != null && buttonController.isMine()) {
+                    if (neighborController != null && neighborController.isMine()) {
                         ++minesNearby;
                     }
                 }
             }
         }
 
-//        if (buttonController != null && buttonController.info_Label != null) {
-//            switch (minesNearby) {
-//                case 1:
-//                    buttonController.info_Label.setStyle("-fx-text-fill: blue");
-//                    break;
-//                case 2:
-//                    buttonController.info_Label.setStyle("-fx-text-fill: green");
-//                    break;
-//                case 3:
-//                    buttonController.info_Label.setStyle("-fx-text-fill: red");
-//                    break;
-//            }
-//        }
+        ButtonController currentController = getController(COL, ROW);
+        if (currentController != null && currentController.info_Label != null) {
+            String colour = mineColours.getOrDefault(minesNearby, null);
+
+            if (colour != null) {
+                currentController.info_Label.setStyle("-fx-text-fill: " + colour);
+            } else {
+                currentController.info_Label.setText(null);
+            }
+
+        }
 
         return minesNearby;
     }
+
 
     public void setEvenSize() {
 
@@ -235,15 +248,23 @@ public class GameController implements Initializable {
     }
 
     public void Timer() {
-        if (timeline == null) { // Überprüfen, ob die Timeline bereits existiert
-            timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-                secondsElapsed++;
-                TimeElapsed.setText("Time elapsed: " + secondsElapsed + "s");
-            }));
+        stopTimer();
+        secondsElapsed = 0;
+        TimeElapsed.setText("Time elapsed: 0s");
 
-            /* repeat timeless amounts */
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.play();
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            secondsElapsed++;
+            TimeElapsed.setText("Time elapsed: " + secondsElapsed + "s");
+        }));
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+    public void stopTimer() {
+        if (timeline != null) {
+            timeline.stop();
         }
     }
+
 }
