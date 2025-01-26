@@ -1,6 +1,5 @@
 package htl.steyr.klichtl_minesweeper;
 
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,7 +33,7 @@ public class ButtonController implements Initializable {
         }
     }
 
-    public void buttonClicked(MouseEvent mouseEvent) throws MineException {
+    public void buttonClicked(MouseEvent mouseEvent) {
         if (mouseEvent != null) {
             if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                 if (!is_Marked && controller.getFieldsMarked() < controller.MINES) {
@@ -54,13 +53,14 @@ public class ButtonController implements Initializable {
         }
     }
 
-    public void reveal() throws MineException {
+    public void reveal() {
         is_Revealed = true;
         button.setVisible(false);
 
         if (isMine()) {
             mine_Label.setVisible(true);
-            throw new MineException();
+            controller.revealAllFields();
+            controller.stopTimer();
         } else {
             info_Label.setVisible(true);
             if (getMines_Nearby() == 0) {

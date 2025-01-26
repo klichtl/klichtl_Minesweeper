@@ -3,12 +3,11 @@
     -fx-border-color: lightgrey;
 }
 
-.center-label {
+.label {
     -fx-text-alignment: center;
     -fx-alignment: center;
-}
-
-#info_Label {
     -fx-font-size: 20;
     -fx-font-family: "Palatino Linotype";
+    -fx-border-color: lightgrey;
+    -fx-border-width: 1px;
 }

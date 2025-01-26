@@ -1,6 +1,5 @@
 package htl.steyr.klichtl_minesweeper;
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -30,6 +29,8 @@ public class GameController implements Initializable {
     public TextField MinesRemaining;
     @FXML
     public TextField TimeElapsed;
+    @FXML
+    public TextField game_Table;
 
     private Timeline timeline;
 
@@ -43,15 +44,11 @@ public class GameController implements Initializable {
 
     ButtonController buttonController = new ButtonController();
 
-    /* HashMap with the difficulty and the DifficultySettings to store information about the difficulty */
-
     public HashMap<String, DifficultySettings> difficultys = new HashMap<>() {{
         put("Beginner", new DifficultySettings(8, 12, 15));
         put("Advanced", new DifficultySettings(16, 24, 35));
         put("Professional", new DifficultySettings(20, 30, 120));
     }};
-
-    /* Hashmap with the different colours depending on the minesNearby */
 
     public HashMap<Integer, String> mineColours = new HashMap<>() {{
         put(1, "#0000FF");  // Blue
@@ -67,21 +64,18 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (chosenDifficulty != null) {
-            /* Add the different choices of difficulty */
             chosenDifficulty.getItems().addAll("Beginner", "Advanced", "Professional");
-
-            /* Set a default value */
             chosenDifficulty.setValue("Beginner");
         }
     }
 
     @FXML
     public void onStartButtonClicked(ActionEvent actionEvent) throws IOException {
-
         Grid.getChildren().clear();
         Grid.getRowConstraints().clear();
         Grid.getColumnConstraints().clear();
 
+        game_Table.setText("Score");
         secondsElapsed = 0;
         Timer();
 
@@ -89,7 +83,6 @@ public class GameController implements Initializable {
         setEvenSize();
         setFieldsMarked(0);
 
-        /* fill every field with a button depending on the difficulty selected */
         for (Integer col = 0; col < COLS; ++col) {
             for (Integer row = 0; row < ROWS; ++row) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("button-view.fxml"));
@@ -115,14 +108,12 @@ public class GameController implements Initializable {
 
             String coordinates = randomCOL + "," + randomROW;
 
-            /* set a mine, only if there is not an existing mine under the button */
             if (!placedMines.contains(coordinates)) {
                 placedMines.add(coordinates);
                 buttonController = getController(randomCOL, randomROW);
                 if (buttonController != null) {
                     buttonController.setMine(true);
                 }
-
                 ++mineCount;
             }
         }
@@ -136,22 +127,14 @@ public class GameController implements Initializable {
     }
 
     public void revealFields(Integer COL, Integer ROW) {
-
-        /* If zero mines are nearby, show all surrounding fields */
-
         for (Integer col = (-1); col <= 1; ++col) {
-
             for (Integer row = (-1); row <= 1; ++row) {
-
                 if (COL + col >= 0 && COL + col < COLS && ROW + row >= 0 && ROW + row < ROWS) {
                     buttonController = getController(COL + col, ROW + row);
 
                     if (buttonController != null && !buttonController.isRevealed() && !buttonController.isMine()) {
-                        try {
-                            buttonController.reveal();
-                        } catch (MineException e) {
-                            System.out.println("Game Over! Mine found at: " + COL + " | " + ROW);
-                        }
+
+                        buttonController.reveal();
 
                         if (buttonController.getMines_Nearby() == 0) {
                             revealFields(COL + col, ROW + row);
@@ -160,6 +143,18 @@ public class GameController implements Initializable {
                 }
             }
         }
+    }
+
+    public void revealAllFields() {
+        for (Integer col = 0; col < COLS; ++col) {
+            for (Integer row = 0; row < ROWS; ++row) {
+                buttonController = getController(col, row);
+                if (buttonController != null && !buttonController.isRevealed()) {
+                    buttonController.reveal();
+                }
+            }
+        }
+        game_Table.setText(chosenDifficulty.getValue() + " verloren mit " + (MINES - fieldsMarked) + " Flags übrig");
     }
 
     private ButtonController getController(int COL, int ROW) {
@@ -174,7 +169,6 @@ public class GameController implements Initializable {
     public int getMines_Near_Position(int COL, int ROW) {
         int minesNearby = 0;
 
-        // Schleife über benachbarte Felder
         for (Integer col = (-1); col <= 1; ++col) {
             for (Integer row = (-1); row <= 1; ++row) {
                 if (col != 0 || row != 0) {
@@ -196,23 +190,18 @@ public class GameController implements Initializable {
             } else {
                 currentController.info_Label.setText(null);
             }
-
         }
 
         return minesNearby;
     }
 
-
     public void setEvenSize() {
-
-        /* give every Row the same space */
         for (Integer row = 0; row < ROWS; row++) {
             RowConstraints rowConstraints = new RowConstraints();
             rowConstraints.setPercentHeight(100.0 / ROWS);
             Grid.getRowConstraints().add(rowConstraints);
         }
 
-        /* give every Colum the same space */
         for (Integer col = 0; col < COLS; col++) {
             ColumnConstraints colConstraints = new ColumnConstraints();
             colConstraints.setPercentWidth(100.0 / COLS);
@@ -266,5 +255,4 @@ public class GameController implements Initializable {
             timeline.stop();
         }
     }
-
 }
