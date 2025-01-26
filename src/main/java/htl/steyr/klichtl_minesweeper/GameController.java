@@ -2,14 +2,16 @@ package htl.steyr.klichtl_minesweeper;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -24,13 +26,13 @@ public class GameController implements Initializable {
     @FXML
     public GridPane Grid;
     @FXML
-    public ChoiceBox<String> chosenDifficulty;
-    @FXML
     public TextField MinesRemaining;
     @FXML
     public TextField TimeElapsed;
     @FXML
     public TextField game_Table;
+    @FXML
+    public Button switch_to_Menu;
 
     private Timeline timeline;
 
@@ -63,14 +65,15 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (chosenDifficulty != null) {
-            chosenDifficulty.getItems().addAll("Beginner", "Advanced", "Professional");
-            chosenDifficulty.setValue("Beginner");
+        try {
+            onStartButtonClicked();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @FXML
-    public void onStartButtonClicked(ActionEvent actionEvent) throws IOException {
+    public void onStartButtonClicked() throws IOException {
         Grid.getChildren().clear();
         Grid.getRowConstraints().clear();
         Grid.getColumnConstraints().clear();
@@ -154,7 +157,7 @@ public class GameController implements Initializable {
                 }
             }
         }
-        game_Table.setText(chosenDifficulty.getValue() + " verloren mit " + (MINES - fieldsMarked) + " Flags übrig");
+        game_Table.setText("Game over with " + (MINES - fieldsMarked) + " Flags remaining");
     }
 
     private ButtonController getController(int COL, int ROW) {
@@ -210,17 +213,26 @@ public class GameController implements Initializable {
     }
 
     public DifficultySettings getDifficulty() {
-        String difficulty = chosenDifficulty.getValue();
-        DifficultySettings settings = difficultys.get(difficulty);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("menu-view.fxml"));
+            Parent root = loader.load();
+            MenuController menuController = loader.getController();
 
-        if (settings != null) {
-            ROWS = settings.getROWS();
-            COLS = settings.getCOLS();
-            MINES = settings.getMINES();
-        } else {
-            throw new IllegalArgumentException("Error loading Difficulty");
+            String difficulty = menuController.chosenDifficulty.getValue();
+            DifficultySettings settings = difficultys.get(difficulty);
+
+            if (settings != null) {
+                ROWS = settings.getROWS();
+                COLS = settings.getCOLS();
+                MINES = settings.getMINES();
+            } else {
+                throw new IllegalArgumentException("Error loading Difficulty");
+            }
+            return settings;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Error loading Menu", e);
         }
-        return settings;
     }
 
     public int getFieldsMarked() {
@@ -254,5 +266,13 @@ public class GameController implements Initializable {
         if (timeline != null) {
             timeline.stop();
         }
+    }
+
+    public void switchToMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("menu-view.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = (Stage) switch_to_Menu.getScene().getWindow();
+        stage.setScene(new Scene(root));
     }
 }
