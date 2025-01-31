@@ -2,7 +2,6 @@ package htl.steyr.klichtl_minesweeper;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -16,6 +15,7 @@ public class GameApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Minesweeper");
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Minesweeper-Icon.png")));
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

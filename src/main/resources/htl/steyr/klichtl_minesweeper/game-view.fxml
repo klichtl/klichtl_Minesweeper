@@ -2,35 +2,32 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="475.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="htl.steyr.klichtl_minesweeper.GameController">
+<AnchorPane prefHeight="715.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="htl.steyr.klichtl_minesweeper.GameController">
     <children>
-        <TextField fx:id="MinesRemaining" editable="false" focusTraversable="false" layoutX="14.0" layoutY="14.0"
-                   prefHeight="40.0" prefWidth="164.0" text="Mines remaining:"/>
-        <Button focusTraversable="false" layoutX="622.0" layoutY="421.0" mnemonicParsing="false"
-                onAction="#onStartButtonClicked" prefHeight="40.0" prefWidth="164.0" text="Restart"
-                AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0"/>
-        <GridPane fx:id="Grid" layoutX="14.0" layoutY="61.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                  prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../style.css" AnchorPane.bottomAnchor="14.0"
-                  AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="186.0" AnchorPane.topAnchor="61.0">
+      <ImageView fitHeight="715.0" fitWidth="1200.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../../../images/Minesweeper-Game-Background.png" />
+         </image>
+      </ImageView>
+        <TextField fx:id="MinesRemaining" editable="false" focusTraversable="false" layoutX="14.0" layoutY="14.0" prefHeight="40.0" prefWidth="164.0" text="Mines remaining:" />
+        <Button focusTraversable="false" layoutX="622.0" layoutY="421.0" mnemonicParsing="false" onAction="#onStartButtonClicked" prefHeight="40.0" prefWidth="164.0" text="Restart" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+        <GridPane fx:id="Grid" layoutX="14.0" layoutY="61.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../style.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="186.0" AnchorPane.topAnchor="61.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
-        <TextField fx:id="TimeElapsed" editable="false" focusTraversable="false" layoutX="189.0" layoutY="14.0"
-                   prefHeight="40.0" prefWidth="164.0" text="Time elapsed:"/>
-        <TextField fx:id="game_Table" alignment="CENTER" focusTraversable="false" layoutX="362.0" layoutY="14.0"
-                   prefHeight="40.0" prefWidth="252.0" text="HighScore" AnchorPane.leftAnchor="362.0"
-                   AnchorPane.rightAnchor="186.0" AnchorPane.topAnchor="14.0"/>
-        <Button fx:id="switch_to_Menu" layoutX="622.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchToMenu"
-                prefHeight="40.0" prefWidth="164.0" text="Menu"/>
+        <TextField fx:id="TimeElapsed" editable="false" focusTraversable="false" layoutX="189.0" layoutY="14.0" prefHeight="40.0" prefWidth="164.0" text="Time elapsed:" />
+        <TextField fx:id="game_Table" alignment="CENTER" focusTraversable="false" layoutX="362.0" layoutY="14.0" prefHeight="40.0" prefWidth="252.0" text="HighScore" AnchorPane.leftAnchor="362.0" AnchorPane.rightAnchor="186.0" AnchorPane.topAnchor="14.0" />
+        <Button fx:id="switch_to_Menu_Button" layoutX="622.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchToMenu" prefHeight="40.0" prefWidth="164.0" text="Menu" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
     </children>
 </AnchorPane>

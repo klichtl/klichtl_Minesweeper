@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,13 +14,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
-import java.util.ResourceBundle;
 
-public class GameController implements Initializable {
+public class GameController {
 
     @FXML
     public GridPane Grid;
@@ -32,57 +29,48 @@ public class GameController implements Initializable {
     @FXML
     public TextField game_Table;
     @FXML
-    public Button switch_to_Menu;
-
-    private Timeline timeline;
+    public Button switch_to_Menu_Button;
 
     public Integer ROWS;
     public Integer COLS;
     public Integer MINES;
 
     public Integer fieldsMarked = 0;
-
     public Integer secondsElapsed = 0;
+
+    public Timeline timeline;
 
     ButtonController buttonController = new ButtonController();
 
+    /* Hashmap to store the different Settings appropriate to the Difficulty */
     public HashMap<String, DifficultySettings> difficultys = new HashMap<>() {{
         put("Beginner", new DifficultySettings(8, 12, 15));
         put("Advanced", new DifficultySettings(16, 24, 35));
         put("Professional", new DifficultySettings(20, 30, 120));
     }};
 
+    /* Hashmap to store the different colours the info_label get, matching the mines Nearby */
     public HashMap<Integer, String> mineColours = new HashMap<>() {{
-        put(1, "#0000FF");  // Blue
-        put(2, "#008000");  // Green
-        put(3, "#FF0000");  // Red
-        put(4, "#000080");  // dark Blue
-        put(5, "#800000");  // dark Red
-        put(6, "#008080");  // Cyan
-        put(7, "#000000");  // Black
-        put(8, "#808080");  // Grey
+        put(1, "#0000FF");  /* Blue         */
+        put(2, "#008000");  /* Green        */
+        put(3, "#FF0000");  /* Red          */
+        put(4, "#000080");  /* Blue         */
+        put(5, "#800000");  /* dark Blue    */
+        put(6, "#008080");  /* Cyan         */
+        put(7, "#000000");  /* Black        */
+        put(8, "#808080");  /* Grey         */
     }};
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            onStartButtonClicked();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @FXML
     public void onStartButtonClicked() throws IOException {
+
         Grid.getChildren().clear();
         Grid.getRowConstraints().clear();
         Grid.getColumnConstraints().clear();
 
-        game_Table.setText("Score");
         secondsElapsed = 0;
         Timer();
 
-        getDifficulty();
         setEvenSize();
         setFieldsMarked(0);
 
@@ -101,8 +89,10 @@ public class GameController implements Initializable {
             }
         }
 
-        Integer mineCount = 0;
+        /* Hashmap to store the Coordinates of the already placed Mines */
         HashSet<String> placedMines = new HashSet<>();
+        Integer mineCount = 0;
+
 
         while (mineCount < MINES) {
             Random random = new Random();
@@ -212,26 +202,14 @@ public class GameController implements Initializable {
         }
     }
 
-    public DifficultySettings getDifficulty() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("menu-view.fxml"));
-            Parent root = loader.load();
-            MenuController menuController = loader.getController();
-
-            String difficulty = menuController.chosenDifficulty.getValue();
-            DifficultySettings settings = difficultys.get(difficulty);
-
-            if (settings != null) {
-                ROWS = settings.getROWS();
-                COLS = settings.getCOLS();
-                MINES = settings.getMINES();
-            } else {
-                throw new IllegalArgumentException("Error loading Difficulty");
-            }
-            return settings;
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Error loading Menu", e);
+    public void setDifficulty(String difficulty) {
+        DifficultySettings settings = difficultys.get(difficulty);
+        if (settings != null) {
+            ROWS = settings.getROWS();
+            COLS = settings.getCOLS();
+            MINES = settings.getMINES();
+        } else {
+            throw new IllegalArgumentException("Error loading Difficulty");
         }
     }
 
@@ -272,7 +250,7 @@ public class GameController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("menu-view.fxml"));
         Parent root = loader.load();
 
-        Stage stage = (Stage) switch_to_Menu.getScene().getWindow();
+        Stage stage = (Stage) switch_to_Menu_Button.getScene().getWindow();
         stage.setScene(new Scene(root));
     }
 }

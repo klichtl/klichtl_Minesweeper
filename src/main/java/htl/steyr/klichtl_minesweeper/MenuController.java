@@ -16,23 +16,34 @@ import java.util.ResourceBundle;
 public class MenuController implements Initializable {
 
     @FXML
-    public Button switch_to_Game;
+    public Button switch_to_Game_Button;
     @FXML
     public ChoiceBox<String> chosenDifficulty;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (chosenDifficulty != null) {
+            /* Add all Difficulty Options */
             chosenDifficulty.getItems().addAll("Beginner", "Advanced", "Professional");
+            /* Default Difficulty */
             chosenDifficulty.setValue("Beginner");
         }
     }
 
+    @FXML
     public void switchToGame() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("game-view.fxml"));
         Parent root = loader.load();
 
-        Stage stage = (Stage) switch_to_Game.getScene().getWindow();
+        GameController gameController = loader.getController();
+        String difficulty = chosenDifficulty.getValue();
+        gameController.setDifficulty(difficulty);
+        gameController.onStartButtonClicked();
+
+        Stage stage = (Stage) switch_to_Game_Button.getScene().getWindow();
+
         stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.show();
     }
 }

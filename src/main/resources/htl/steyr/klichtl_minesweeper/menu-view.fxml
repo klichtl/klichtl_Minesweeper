@@ -8,25 +8,20 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="475.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="htl.steyr.klichtl_minesweeper.MenuController">
+<AnchorPane prefHeight="715.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="htl.steyr.klichtl_minesweeper.MenuController">
     <children>
-        <ImageView fitHeight="475.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true"
-                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                   AnchorPane.topAnchor="0.0">
+        <ImageView fitHeight="715.0" fitWidth="1200.0" layoutY="1.0" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <image>
-                <Image url="@../../../images/Minesweeper-Background.png"/>
+                <Image url="@../../../images/Minesweeper-Menu-Background.png" />
             </image>
         </ImageView>
-        <Text layoutX="329.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Minesweeper"
-              wrappingWidth="141.2568359375">
+        <Text boundsType="LOGICAL_VERTICAL_CENTER" layoutX="524.0" layoutY="522.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Minesweeper" textAlignment="CENTER" wrappingWidth="150.2568359375" AnchorPane.bottomAnchor="184.0" AnchorPane.leftAnchor="524.0" AnchorPane.rightAnchor="526.0">
             <font>
-                <Font size="22.0"/>
+                <Font size="25.0" />
             </font>
         </Text>
-        <Text layoutX="362.0" layoutY="364.0" strokeType="OUTSIDE" strokeWidth="0.0" text="by Lichtl Kevin"/>
-        <ChoiceBox fx:id="chosenDifficulty" layoutX="325.0" layoutY="377.0" prefWidth="150.0"/>
-        <Button fx:id="switch_to_Game" layoutX="362.0" layoutY="416.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0"
-                text="Start" onAction="#switchToGame" />
+        <Text boundsType="LOGICAL_VERTICAL_CENTER" layoutX="561.0" layoutY="552.0" strokeType="OUTSIDE" strokeWidth="0.0" text="by Lichtl Kevin" textAlignment="CENTER" AnchorPane.bottomAnchor="159.0" AnchorPane.leftAnchor="561.0" AnchorPane.rightAnchor="563.2783203125" />
+        <ChoiceBox fx:id="chosenDifficulty" focusTraversable="false" layoutX="491.0" layoutY="591.0" maxHeight="1.7976931348623157E308" maxWidth="217.0" prefHeight="32.0" prefWidth="217.0" AnchorPane.bottomAnchor="99.0" AnchorPane.leftAnchor="491.0" AnchorPane.rightAnchor="492.0" />
+        <Button fx:id="switch_to_Game_Button" layoutX="491.0" layoutY="647.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#switchToGame" prefHeight="32.0" prefWidth="217.0" text="Start" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="491.0" AnchorPane.rightAnchor="492.0" />
     </children>
 </AnchorPane>
