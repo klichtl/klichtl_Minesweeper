@@ -27,8 +27,6 @@ public class GameController {
     @FXML
     public TextField TimeElapsed;
     @FXML
-    public TextField game_Table;
-    @FXML
     public Button switch_to_Menu_Button;
 
     public Integer ROWS;
@@ -39,6 +37,10 @@ public class GameController {
     public Integer secondsElapsed = 0;
 
     public Timeline timeline;
+
+    private Boolean gameOver = false;
+
+    private String currentDifficulty;
 
     ButtonController buttonController = new ButtonController();
 
@@ -68,6 +70,7 @@ public class GameController {
         Grid.getRowConstraints().clear();
         Grid.getColumnConstraints().clear();
 
+        gameOver = false;
         secondsElapsed = 0;
         Timer();
 
@@ -136,6 +139,7 @@ public class GameController {
                 }
             }
         }
+        checkGameStatus();
     }
 
     public void revealAllFields() {
@@ -147,7 +151,6 @@ public class GameController {
                 }
             }
         }
-        game_Table.setText("Game over with " + (MINES - fieldsMarked) + " Flags remaining");
     }
 
     private ButtonController getController(int COL, int ROW) {
@@ -204,6 +207,7 @@ public class GameController {
 
     public void setDifficulty(String difficulty) {
         DifficultySettings settings = difficultys.get(difficulty);
+        this.currentDifficulty = difficulty;
         if (settings != null) {
             ROWS = settings.getROWS();
             COLS = settings.getCOLS();
@@ -252,5 +256,59 @@ public class GameController {
 
         Stage stage = (Stage) switch_to_Menu_Button.getScene().getWindow();
         stage.setScene(new Scene(root));
+    }
+
+
+    public void checkGameStatus() {
+        boolean allNonMinesRevealed = true;
+        boolean allMinesMarked = true;
+
+        for (int col = 0; col < COLS; col++) {
+            for (int row = 0; row < ROWS; row++) {
+                ButtonController buttonController = getController(col, row);
+
+                if (buttonController != null) {
+                    // Überprüfen, ob alle Nicht-Minen-Felder aufgedeckt sind
+                    if (!buttonController.isMine() && !buttonController.isRevealed()) {
+                        allNonMinesRevealed = false;
+                    }
+                    // Überprüfen, ob alle Minen markiert sind
+                    if (buttonController.isMine() && !buttonController.is_Marked) {
+                        allMinesMarked = false;
+                    }
+                }
+            }
+        }
+
+        // Wenn alle Nicht-Minen-Felder aufgedeckt und alle Minen markiert sind, hat der Spieler gewonnen
+        if (allNonMinesRevealed && allMinesMarked) {
+            stopTimer();
+            showGameOverScreen(true); // Spiel gewonnen
+        }
+    }
+
+    public void showGameOverScreen(boolean won) {
+        if (gameOver) {
+            return;
+        }
+        gameOver = true;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("game-over-view.fxml"));
+            Parent root = loader.load();
+
+            GameOverController gameOverController = loader.getController();
+            gameOverController.setGameResult(won, secondsElapsed, currentDifficulty);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+
+            stage.show();
+
+            gameOverController.setGameResult(won, secondsElapsed, currentDifficulty);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

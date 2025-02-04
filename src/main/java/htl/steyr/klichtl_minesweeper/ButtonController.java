@@ -16,7 +16,7 @@ public class ButtonController implements Initializable {
     public Button button;
 
     private Boolean is_A_Mine = false;
-    private Boolean is_Marked = false;
+    public Boolean is_Marked = false;
     private Boolean is_Revealed = false;
     private Integer mines_Nearby = 0;
 
@@ -36,6 +36,7 @@ public class ButtonController implements Initializable {
     public void buttonClicked(MouseEvent mouseEvent) {
         if (mouseEvent != null) {
             if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                // Rechtsklick: Feld markieren oder Markierung entfernen
                 if (!is_Marked && controller.getFieldsMarked() < controller.MINES) {
                     is_Marked = true;
                     button.setText("🚩");
@@ -45,26 +46,33 @@ public class ButtonController implements Initializable {
                     button.setText("");
                     controller.setFieldsMarked(controller.getFieldsMarked() - 1);
                 }
+                controller.checkGameStatus(); // Spielzustand überprüfen
             } else if (mouseEvent.getButton() == MouseButton.PRIMARY && !is_Marked) {
+                // Linksklick: Feld aufdecken
                 reveal();
             }
-        } else {
-            reveal();
         }
     }
 
     public void reveal() {
-        is_Revealed = true;
-        button.setVisible(false);
+        if (!is_Revealed && !is_Marked) {
+            is_Revealed = true;
+            button.setVisible(false);
+            controller.checkGameStatus(); // Spielzustand überprüfen
 
-        if (isMine()) {
-            mine_Label.setVisible(true);
-            controller.revealAllFields();
-            controller.stopTimer();
-        } else {
-            info_Label.setVisible(true);
-            if (getMines_Nearby() == 0) {
-                controller.revealFields(COL, ROW);
+            if (isMine()) {
+                // Wenn das Feld eine Mine ist, Spiel verloren
+                mine_Label.setVisible(true);
+                controller.revealAllFields();
+                controller.stopTimer();
+                controller.showGameOverScreen(false); // Spiel verloren
+            } else {
+                // Wenn das Feld keine Mine ist, anzeigen, wie viele Minen in der Nähe sind
+                info_Label.setVisible(true);
+                if (getMines_Nearby() == 0) {
+                    // Wenn keine Minen in der Nähe sind, benachbarte Felder aufdecken
+                    controller.revealFields(COL, ROW);
+                }
             }
         }
     }

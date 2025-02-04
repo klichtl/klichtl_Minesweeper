@@ -27,7 +27,6 @@
             </rowConstraints>
         </GridPane>
         <TextField fx:id="TimeElapsed" editable="false" focusTraversable="false" layoutX="189.0" layoutY="14.0" prefHeight="40.0" prefWidth="164.0" text="Time elapsed:" />
-        <TextField fx:id="game_Table" alignment="CENTER" focusTraversable="false" layoutX="362.0" layoutY="14.0" prefHeight="40.0" prefWidth="252.0" text="HighScore" AnchorPane.leftAnchor="362.0" AnchorPane.rightAnchor="186.0" AnchorPane.topAnchor="14.0" />
         <Button fx:id="switch_to_Menu_Button" layoutX="622.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchToMenu" prefHeight="40.0" prefWidth="164.0" text="Menu" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
     </children>
 </AnchorPane>
