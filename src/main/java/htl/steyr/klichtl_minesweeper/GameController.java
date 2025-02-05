@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -39,6 +40,7 @@ public class GameController {
     public Timeline timeline;
 
     private Boolean gameOver = false;
+    private Boolean firstClick = true;
 
     private String currentDifficulty;
 
@@ -71,6 +73,7 @@ public class GameController {
         Grid.getColumnConstraints().clear();
 
         gameOver = false;
+        firstClick = true;
         secondsElapsed = 0;
         Timer();
 
@@ -91,47 +94,21 @@ public class GameController {
                 Grid.add(buttonPane, col, row);
             }
         }
-
-        /* Hashmap to store the Coordinates of the already placed Mines */
-        HashSet<String> placedMines = new HashSet<>();
-        Integer mineCount = 0;
-
-
-        while (mineCount < MINES) {
-            Random random = new Random();
-            Integer randomCOL = random.nextInt(COLS);
-            Integer randomROW = random.nextInt(ROWS);
-
-            String coordinates = randomCOL + "," + randomROW;
-
-            if (!placedMines.contains(coordinates)) {
-                placedMines.add(coordinates);
-                buttonController = getController(randomCOL, randomROW);
-                if (buttonController != null) {
-                    buttonController.setMine(true);
-                }
-                ++mineCount;
-            }
-        }
-
-        for (Integer col = 0; col < COLS; ++col) {
-            for (Integer row = 0; row < ROWS; ++row) {
-                buttonController = getController(col, row);
-                buttonController.setMines_Nearby(getMines_Near_Position(col, row));
-            }
-        }
     }
 
     public void revealFields(Integer COL, Integer ROW) {
+        if (firstClick) {
+            placeMinesAfterFirstClick(COL, ROW);
+            firstClick = false;
+        }
         for (Integer col = (-1); col <= 1; ++col) {
             for (Integer row = (-1); row <= 1; ++row) {
                 if (COL + col >= 0 && COL + col < COLS && ROW + row >= 0 && ROW + row < ROWS) {
                     buttonController = getController(COL + col, ROW + row);
-
                     if (buttonController != null && !buttonController.isRevealed() && !buttonController.isMine()) {
-
                         buttonController.reveal();
 
+                        /* recursive function call */
                         if (buttonController.getMines_Nearby() == 0) {
                             revealFields(COL + col, ROW + row);
                         }
@@ -260,19 +237,17 @@ public class GameController {
 
 
     public void checkGameStatus() {
-        boolean allNonMinesRevealed = true;
-        boolean allMinesMarked = true;
+        Boolean allNonMinesRevealed = true;
+        Boolean allMinesMarked = true;
 
         for (int col = 0; col < COLS; col++) {
             for (int row = 0; row < ROWS; row++) {
                 ButtonController buttonController = getController(col, row);
 
                 if (buttonController != null) {
-                    // Überprüfen, ob alle Nicht-Minen-Felder aufgedeckt sind
                     if (!buttonController.isMine() && !buttonController.isRevealed()) {
                         allNonMinesRevealed = false;
                     }
-                    // Überprüfen, ob alle Minen markiert sind
                     if (buttonController.isMine() && !buttonController.is_Marked) {
                         allMinesMarked = false;
                     }
@@ -280,10 +255,10 @@ public class GameController {
             }
         }
 
-        // Wenn alle Nicht-Minen-Felder aufgedeckt und alle Minen markiert sind, hat der Spieler gewonnen
+        /* if all non-mine-fields are revealed and all mines are marked, the player has won */
         if (allNonMinesRevealed && allMinesMarked) {
             stopTimer();
-            showGameOverScreen(true); // Spiel gewonnen
+            showGameOverScreen(true);
         }
     }
 
@@ -302,13 +277,60 @@ public class GameController {
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-
+            stage.setTitle("Game-Over");
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Minesweeper-Icon.png")));
             stage.show();
-
-            gameOverController.setGameResult(won, secondsElapsed, currentDifficulty);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
+    public void placeMinesAfterFirstClick(int firstClickCol, int firstClickRow) {
+        /* Hashset to store the mines that have been placed */
+        HashSet<String> placedMines = new HashSet<>();
+        Integer mineCount = 0;
+        Random random = new Random();
+
+        /* Hashset to store the fields that have to be excluded */
+        HashSet<String> excludedCoords = new HashSet<>();
+        /* exclude the neighbor fields from  */
+        for (int col = -1; col <= 1; col++) {
+            for (int row = -1; row <= 1; row++) {
+                if (firstClickCol + col >= 0 && firstClickCol + col < COLS && firstClickRow + row >= 0 && firstClickRow + row < ROWS) {
+                    excludedCoords.add((firstClickCol + col) + "," + (firstClickRow + row));
+                }
+            }
+        }
+        /* exclude the first button clicked */
+        excludedCoords.add(firstClickCol + "," + firstClickRow);
+
+        /* place the mines excluding the neighbor fields after clicking the first button */
+        while (mineCount < MINES) {
+            Integer randomCOL = random.nextInt(COLS);
+            Integer randomROW = random.nextInt(ROWS);
+
+            String coordinates = randomCOL + "," + randomROW;
+
+            if (!placedMines.contains(coordinates) && !excludedCoords.contains(coordinates)) {
+                placedMines.add(coordinates);
+                ButtonController buttonController = getController(randomCOL, randomROW);
+                if (buttonController != null) {
+                    buttonController.setMine(true);
+                }
+                mineCount++;
+            }
+        }
+
+        /* set the value of mines nearby */
+        for (int col = 0; col < COLS; col++) {
+            for (int row = 0; row < ROWS; row++) {
+                ButtonController buttonController = getController(col, row);
+                if (buttonController != null) {
+                    buttonController.setMines_Nearby(getMines_Near_Position(col, row));
+                }
+            }
+        }
+    }
+
+
 }

@@ -36,7 +36,6 @@ public class ButtonController implements Initializable {
     public void buttonClicked(MouseEvent mouseEvent) {
         if (mouseEvent != null) {
             if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-                // Rechtsklick: Feld markieren oder Markierung entfernen
                 if (!is_Marked && controller.getFieldsMarked() < controller.MINES) {
                     is_Marked = true;
                     button.setText("🚩");
@@ -46,31 +45,28 @@ public class ButtonController implements Initializable {
                     button.setText("");
                     controller.setFieldsMarked(controller.getFieldsMarked() - 1);
                 }
-                controller.checkGameStatus(); // Spielzustand überprüfen
+                controller.checkGameStatus();
             } else if (mouseEvent.getButton() == MouseButton.PRIMARY && !is_Marked) {
-                // Linksklick: Feld aufdecken
                 reveal();
             }
         }
     }
 
+
     public void reveal() {
         if (!is_Revealed && !is_Marked) {
             is_Revealed = true;
             button.setVisible(false);
-            controller.checkGameStatus(); // Spielzustand überprüfen
+            controller.checkGameStatus();
 
             if (isMine()) {
-                // Wenn das Feld eine Mine ist, Spiel verloren
                 mine_Label.setVisible(true);
                 controller.revealAllFields();
                 controller.stopTimer();
-                controller.showGameOverScreen(false); // Spiel verloren
+                controller.showGameOverScreen(false);
             } else {
-                // Wenn das Feld keine Mine ist, anzeigen, wie viele Minen in der Nähe sind
                 info_Label.setVisible(true);
                 if (getMines_Nearby() == 0) {
-                    // Wenn keine Minen in der Nähe sind, benachbarte Felder aufdecken
                     controller.revealFields(COL, ROW);
                 }
             }
