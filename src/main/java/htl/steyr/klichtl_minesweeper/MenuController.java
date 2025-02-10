@@ -7,10 +7,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class MenuController implements Initializable {
@@ -19,6 +24,8 @@ public class MenuController implements Initializable {
     public Button switch_to_Game_Button;
     @FXML
     public ChoiceBox<String> chosenDifficulty;
+    @FXML
+    public TextField recordTable;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

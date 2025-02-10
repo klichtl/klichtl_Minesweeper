@@ -89,6 +89,9 @@ public class ButtonController implements Initializable {
             mine_Label.setVisible(false);
             info_Label.setVisible(true);
             info_Label.setText(Integer.toString(mines_Nearby));
+            if (mines_Nearby.equals(0)) {
+                info_Label.setStyle("-fx-text-fill: rgba(0, 0, 0, 0)");
+            }
         }
     }
 

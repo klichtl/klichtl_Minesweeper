@@ -10,18 +10,18 @@
 
 <AnchorPane prefHeight="715.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="htl.steyr.klichtl_minesweeper.MenuController">
     <children>
-        <ImageView fitHeight="715.0" fitWidth="1200.0" layoutY="1.0" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <ImageView fitHeight="730.0" fitWidth="1200.0" layoutY="1.0" preserveRatio="true" AnchorPane.bottomAnchor="-15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <image>
                 <Image url="@../../../images/Minesweeper-Menu-Background.png" />
             </image>
         </ImageView>
-        <Text boundsType="LOGICAL_VERTICAL_CENTER" layoutX="524.0" layoutY="522.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Minesweeper" textAlignment="CENTER" wrappingWidth="150.2568359375" AnchorPane.bottomAnchor="184.0" AnchorPane.leftAnchor="524.0" AnchorPane.rightAnchor="526.0">
+        <Text boundsType="LOGICAL_VERTICAL_CENTER" layoutX="522.0" layoutY="516.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Minesweeper" textAlignment="CENTER" wrappingWidth="150.2568359375" AnchorPane.bottomAnchor="190.0" AnchorPane.leftAnchor="522.0" AnchorPane.rightAnchor="528.0">
             <font>
                 <Font size="25.0" />
             </font>
         </Text>
-        <Text boundsType="LOGICAL_VERTICAL_CENTER" layoutX="561.0" layoutY="552.0" strokeType="OUTSIDE" strokeWidth="0.0" text="by Lichtl Kevin" textAlignment="CENTER" AnchorPane.bottomAnchor="159.0" AnchorPane.leftAnchor="561.0" AnchorPane.rightAnchor="563.2783203125" />
-        <ChoiceBox fx:id="chosenDifficulty" focusTraversable="false" layoutX="491.0" layoutY="591.0" maxHeight="1.7976931348623157E308" maxWidth="217.0" prefHeight="32.0" prefWidth="217.0" AnchorPane.bottomAnchor="99.0" AnchorPane.leftAnchor="491.0" AnchorPane.rightAnchor="492.0" />
-        <Button fx:id="switch_to_Game_Button" layoutX="491.0" layoutY="647.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#switchToGame" prefHeight="32.0" prefWidth="217.0" text="Start" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="491.0" AnchorPane.rightAnchor="492.0" />
+        <Text boundsType="LOGICAL_VERTICAL_CENTER" layoutX="559.0" layoutY="538.0" strokeType="OUTSIDE" strokeWidth="0.0" text="by Lichtl Kevin" textAlignment="CENTER" wrappingWidth="75.978515625" AnchorPane.bottomAnchor="173.0" AnchorPane.leftAnchor="559.0" AnchorPane.rightAnchor="565.2783203125" />
+        <ChoiceBox fx:id="chosenDifficulty" focusTraversable="false" layoutX="501.0" layoutY="575.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0" prefWidth="198.0" AnchorPane.bottomAnchor="108.0" AnchorPane.leftAnchor="501.0" AnchorPane.rightAnchor="501.0" />
+        <Button fx:id="switch_to_Game_Button" focusTraversable="false" layoutX="501.0" layoutY="617.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#switchToGame" prefHeight="32.0" prefWidth="200.0" text="Start" AnchorPane.bottomAnchor="66.0" AnchorPane.leftAnchor="501.0" AnchorPane.rightAnchor="501.0" />
     </children>
 </AnchorPane>

@@ -1,9 +1,11 @@
 package htl.steyr.klichtl_minesweeper;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,55 +20,48 @@ public class GameOverController {
     @FXML
     public TextField username;
     @FXML
-    public Button saveButtonClicked;
+    public Button saveButton;
 
-    private Boolean gameWon;
-    private Integer timeElapsed;
+    private boolean gameWon;
+    private int timeElapsed;
     private String difficulty;
 
-    public void setGameResult(Boolean won, Integer timeElapsed, String difficulty) {
+    public void setGameResult(boolean won, int timeElapsed, String difficulty) {
         this.gameWon = won;
         this.timeElapsed = timeElapsed;
-
         if (won) {
             resultLabel.setText("You Won");
         } else {
-            resultLabel.setText("Game Over");
+            resultLabel.setText("You Lost");
+            saveButton.setDisable(true);
+            username.setDisable(true);
         }
-
         timeLabel.setText("Time Elapsed: " + timeElapsed + "s");
-
         this.difficulty = difficulty;
     }
 
-
-    @FXML
-    public void onSaveButtonClicked() {
+    public void onSaveButtonClicked(javafx.event.ActionEvent actionEvent) {
         String user = username.getText().trim();
         if (!user.isEmpty()) {
-            writeGameResultToFile(user, gameWon, timeElapsed);
+            writeGameResultToFile(user, timeElapsed);
+
         } else {
-            System.out.println("Please enter a valid username!");
+            System.out.println("Please enter a username!");
         }
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
 
-    private void writeGameResultToFile(String username, Boolean won, Integer timeElapsed) {
+    private void writeGameResultToFile(String username, int timeElapsed) {
+
         File file = new File("game_results.csv");
 
-        try (FileWriter writer = new FileWriter(file, true)) {
-            if (!file.exists() || file.length() == 0) {
-                writer.write("username;result;time;difficulty\n");
-            }
+        try {
+            FileWriter writer = new FileWriter(file, true);
 
-            String result;
-            if (won) {
-                result = "won";
-            } else {
-                result = "lost";
-            }
-
-            writer.write(username + ";" + result + ";" + timeElapsed + ";" + difficulty + "\n");
-
+            writer.write(username + ";" + timeElapsed + ";" + difficulty + "\n");
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error saving...");
