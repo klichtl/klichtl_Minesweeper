@@ -22,12 +22,20 @@ public class GameOverController {
     @FXML
     public Button saveButton;
 
-    private boolean gameWon;
     private int timeElapsed;
     private String difficulty;
 
+    /**
+     * Description for the setGameResult method:
+     * <p>
+     * In this Methode, the text of the different Labels is set depending on the status of the game.
+     * If the player has lost, he is not able to save his record.
+     *
+     * @param won boolean to see if the player has won or not won
+     * @param timeElapsed the time that was elapsed since the game was started
+     * @param difficulty the difficulty that was selected
+     */
     public void setGameResult(boolean won, int timeElapsed, String difficulty) {
-        this.gameWon = won;
         this.timeElapsed = timeElapsed;
         if (won) {
             resultLabel.setText("You Won");
@@ -40,11 +48,19 @@ public class GameOverController {
         this.difficulty = difficulty;
     }
 
+    /**
+     * Description for the onSaveButtonClicked method:
+     * <p>
+     * In this Methode, it is checked if the user has entered a username, and therefore is
+     * able to save his result with the writeGameResultToFile.
+     * Also, if the Save-Button is clicked the Window is closed.
+     *
+     * @param actionEvent the Save-Button
+     */
     public void onSaveButtonClicked(javafx.event.ActionEvent actionEvent) {
         String user = username.getText().trim();
         if (!user.isEmpty()) {
             writeGameResultToFile(user, timeElapsed);
-
         } else {
             System.out.println("Please enter a username!");
         }
@@ -53,6 +69,14 @@ public class GameOverController {
         stage.close();
     }
 
+    /**
+     * Description for the writeGameResultToFile method:
+     * <p>
+     * In this Methode, the username, time, and difficulty is written into the "game-results.csv".
+     *
+     * @param username the username the user has chosen
+     * @param timeElapsed the time that is elapsed since the beginning of the game
+     */
     private void writeGameResultToFile(String username, int timeElapsed) {
 
         File file = new File("game_results.csv");
@@ -63,7 +87,6 @@ public class GameOverController {
             writer.write(username + ";" + timeElapsed + ";" + difficulty + "\n");
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println("Error saving...");
         }
     }

@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class GameApplication extends Application {
     @Override
@@ -14,7 +15,7 @@ public class GameApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(GameApplication.class.getResource("menu-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Minesweeper");
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Minesweeper-Icon.png")));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Minesweeper-Icon.png"))));
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();

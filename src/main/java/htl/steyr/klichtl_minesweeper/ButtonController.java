@@ -15,16 +15,21 @@ public class ButtonController implements Initializable {
     public Label info_Label;
     public Button button;
 
-    private Boolean is_A_Mine = false;
-    public Boolean is_Marked = false;
-    private Boolean is_Revealed = false;
-    private Integer mines_Nearby = 0;
+    private boolean is_A_Mine = false;
+    public boolean is_Marked = false;
+    private boolean is_Revealed = false;
+    private int mines_Nearby = 0;
 
-    private Integer COL;
-    private Integer ROW;
+    private int COL;
+    private int ROW;
 
     private GameController controller;
 
+    /**
+     * Description for the initialize method:
+     * <p>
+     * In this Methode, the info_ & mine_Label are set to be not visible, this will change later on...
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (mine_Label != null) {
@@ -33,6 +38,15 @@ public class ButtonController implements Initializable {
         }
     }
 
+    /**
+     * Description for the buttonClicked method:
+     * <p>
+     * In this Methode, mouse clicks are handled.
+     * - right click -> set a flag to the Field
+     * - left click -> reveal the Field
+     *
+     * @param mouseEvent the mouseevent triggered by a click.
+     */
     public void buttonClicked(MouseEvent mouseEvent) {
         if (mouseEvent != null) {
             if (mouseEvent.getButton() == MouseButton.SECONDARY) {
@@ -52,7 +66,13 @@ public class ButtonController implements Initializable {
         }
     }
 
-
+    /**
+     * Description for the reveal method:
+     * <p>
+     * In this Methode, it is checked if the Field that was clicked is a mine or not.
+     * If it is a mine, the timer is stopped, and the mine_Label is shown, als well as showing the gameOverScreen.
+     * If it is not, the info_Label is shown, and the game goes on.
+     */
     public void reveal() {
         if (!is_Revealed && !is_Marked) {
             is_Revealed = true;
@@ -82,6 +102,12 @@ public class ButtonController implements Initializable {
         mine_Label.setVisible(mine);
     }
 
+    /**
+     * Description for the setMines_Nearby method:
+     * <p>
+     * In this Methode, the info_Label gets the value of the mines nearby.
+     * Also, if, 0 mines are nearby, the info_Label is set to be invisible, for better looks.
+     */
     public void setMines_Nearby(int mineCount) {
         this.mines_Nearby = mineCount;
 
@@ -89,17 +115,17 @@ public class ButtonController implements Initializable {
             mine_Label.setVisible(false);
             info_Label.setVisible(true);
             info_Label.setText(Integer.toString(mines_Nearby));
-            if (mines_Nearby.equals(0)) {
+            if (mines_Nearby == 0) {
                 info_Label.setStyle("-fx-text-fill: rgba(0, 0, 0, 0)");
             }
         }
     }
 
-    public Integer getMines_Nearby() {
+    public int getMines_Nearby() {
         return mines_Nearby;
     }
 
-    public Boolean isRevealed() {
+    public boolean isRevealed() {
         return is_Revealed;
     }
 

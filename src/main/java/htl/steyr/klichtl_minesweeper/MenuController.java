@@ -7,15 +7,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class MenuController implements Initializable {
@@ -24,9 +19,13 @@ public class MenuController implements Initializable {
     public Button switch_to_Game_Button;
     @FXML
     public ChoiceBox<String> chosenDifficulty;
-    @FXML
-    public TextField recordTable;
 
+    /**
+     * Description for the initialize method:
+     * <p>
+     * In this Methode, the available difficulties are set.
+     * Also, a default value is set (Beginner).
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (chosenDifficulty != null) {
@@ -37,6 +36,11 @@ public class MenuController implements Initializable {
         }
     }
 
+    /**
+     * Description for the switchToGame method:
+     * <p>
+     * In this Methode, the game-view is shown in the current stage.
+     */
     @FXML
     public void switchToGame() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("game-view.fxml"));

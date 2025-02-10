@@ -18,6 +18,7 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Random;
 
 public class GameController {
@@ -31,16 +32,16 @@ public class GameController {
     @FXML
     public Button switch_to_Menu_Button;
 
-    public Integer ROWS;
-    public Integer COLS;
-    public Integer MINES;
-    public Integer fieldsMarked = 0;
-    public Integer secondsElapsed = 0;
+    public int ROWS;
+    public int COLS;
+    public int MINES;
+    public int fieldsMarked = 0;
+    public int secondsElapsed = 0;
 
     public Timeline timeline;
 
-    private Boolean gameOver = false;
-    private Boolean firstClick = true;
+    private boolean gameOver = false;
+    private boolean firstClick = true;
 
     private String currentDifficulty;
 
@@ -48,7 +49,7 @@ public class GameController {
 
     /* Hashmap to store the different Settings appropriate to the Difficulty */
     public HashMap<String, DifficultySettings> difficultys = new HashMap<>() {{
-        put("Beginner", new DifficultySettings(6, 10, 2));
+        put("Beginner", new DifficultySettings(6, 10, 15));
         put("Advanced", new DifficultySettings(15, 25, 35));
         put("Professional", new DifficultySettings(18, 30, 120));
     }};
@@ -85,8 +86,8 @@ public class GameController {
         setEvenSize();
         setFieldsMarked(0);
 
-        for (Integer col = 0; col < COLS; ++col) {
-            for (Integer row = 0; row < ROWS; ++row) {
+        for (int col = 0; col < COLS; ++col) {
+            for (int row = 0; row < ROWS; ++row) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("button-view.fxml"));
                 Pane buttonPane = loader.load();
                 buttonController = loader.getController();
@@ -142,13 +143,13 @@ public class GameController {
      * @param COL the Colum of the Button, that is clicked
      * @param ROW the Row of the Button, that is clicked
      */
-    public void revealFields(Integer COL, Integer ROW) {
+    public void revealFields(int COL, int ROW) {
         if (firstClick) {
             placeMinesAfterFirstClick(COL, ROW);
             firstClick = false;
         }
-        for (Integer col = (-1); col <= 1; ++col) {
-            for (Integer row = (-1); row <= 1; ++row) {
+        for (int col = (-1); col <= 1; ++col) {
+            for (int row = (-1); row <= 1; ++row) {
                 if (COL + col >= 0 && COL + col < COLS && ROW + row >= 0 && ROW + row < ROWS) {
                     buttonController = getController(COL + col, ROW + row);
                     if (buttonController != null && !buttonController.isRevealed() && !buttonController.isMine()) {
@@ -171,8 +172,8 @@ public class GameController {
      * In this Methode, all fields are revealed.
      */
     public void revealAllFields() {
-        for (Integer col = 0; col < COLS; ++col) {
-            for (Integer row = 0; row < ROWS; ++row) {
+        for (int col = 0; col < COLS; ++col) {
+            for (int row = 0; row < ROWS; ++row) {
                 buttonController = getController(col, row);
                 if (buttonController != null && !buttonController.isRevealed()) {
                     buttonController.reveal();
@@ -195,7 +196,7 @@ public class GameController {
     public void placeMinesAfterFirstClick(int firstClickCol, int firstClickRow) {
         /* Hashset to store the mines that have been placed */
         HashSet<String> placedMines = new HashSet<>();
-        Integer mineCount = 0;
+        int mineCount = 0;
         Random random = new Random();
 
         /* Hashset to store the fields that have to be excluded */
@@ -213,8 +214,8 @@ public class GameController {
 
         /* place the mines excluding the neighbor fields after clicking the first button */
         while (mineCount < MINES) {
-            Integer randomCOL = random.nextInt(COLS);
-            Integer randomROW = random.nextInt(ROWS);
+            int randomCOL = random.nextInt(COLS);
+            int randomROW = random.nextInt(ROWS);
 
             String coordinates = randomCOL + "," + randomROW;
 
@@ -249,11 +250,11 @@ public class GameController {
      * @param ROW the selected Row
      * @return minesNearby
      */
-    public int getMines_Near_Position(Integer COL, Integer ROW) {
+    public int getMines_Near_Position(int COL, int ROW) {
         int minesNearby = 0;
 
-        for (Integer col = (-1); col <= 1; ++col) {
-            for (Integer row = (-1); row <= 1; ++row) {
+        for (int col = (-1); col <= 1; ++col) {
+            for (int row = (-1); row <= 1; ++row) {
                 if (col != 0 || row != 0) {
                     ButtonController neighborController = getController(COL + col, ROW + row);
 
@@ -300,8 +301,8 @@ public class GameController {
      * and the game goes on, until eventually the user has won, and then the Game-Over-Screen is displayed and the user has won.
      */
     public void checkGameStatus() {
-        Boolean allNonMinesRevealed = true;
-        Boolean allMinesMarked = true;
+        boolean allNonMinesRevealed = true;
+        boolean allMinesMarked = true;
 
         for (int col = 0; col < COLS; col++) {
             for (int row = 0; row < ROWS; row++) {
@@ -348,10 +349,10 @@ public class GameController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Game-Over");
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Minesweeper-Icon.png")));
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Minesweeper-Icon.png"))));
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Game-over-view could not be found");
         }
     }
 
@@ -361,7 +362,7 @@ public class GameController {
      * In this Method, the data from the difficulty-Settings, depending on the selected
      * difficulty get written into the local variables.
      *
-     * @param difficulty Kommentare
+     * @param difficulty the difficulty selected
      */
     public void setDifficulty(String difficulty) {
         DifficultySettings settings = difficultys.get(difficulty);
@@ -378,17 +379,17 @@ public class GameController {
     /**
      * Description for the setDifficulty method:
      * <p>
-     * In this Method, the Rows and Colums get the same size, by taking 100% of the grid,
+     * In this Method, the Rows and Columns get the same size, by taking 100% of the grid,
      * and deviding that with the amount of Rows/Cols.
      */
     public void setEvenSize() {
-        for (Integer row = 0; row < ROWS; row++) {
+        for (int row = 0; row < ROWS; row++) {
             RowConstraints rowConstraints = new RowConstraints();
             rowConstraints.setPercentHeight(100.0 / ROWS);
             Grid.getRowConstraints().add(rowConstraints);
         }
 
-        for (Integer col = 0; col < COLS; col++) {
+        for (int col = 0; col < COLS; col++) {
             ColumnConstraints colConstraints = new ColumnConstraints();
             colConstraints.setPercentWidth(100.0 / COLS);
             Grid.getColumnConstraints().add(colConstraints);
@@ -399,6 +400,11 @@ public class GameController {
         return fieldsMarked;
     }
 
+    /**
+     * Description for the setFieldsMarked method:
+     * <p>
+     * In this Method, the text of the MinesRemaining TextField is updated
+     */
     public void setFieldsMarked(int fieldsMarked) {
         this.fieldsMarked = fieldsMarked;
         /* update the TExtField */
