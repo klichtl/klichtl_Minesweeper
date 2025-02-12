@@ -9,7 +9,7 @@
     <children>
         <Label fx:id="resultLabel" focusTraversable="false" layoutX="124.0" layoutY="20.0" text="Won/Lost" />
         <Label fx:id="timeLabel" focusTraversable="false" layoutX="106.0" layoutY="47.0" text="Time Elapsed: 0s" />
-        <TextField fx:id="username" focusTraversable="false" layoutX="11.0" layoutY="100.0" prefHeight="32.0" prefWidth="213.0" promptText="username" />
+        <TextField fx:id="usernameText" focusTraversable="false" layoutX="11.0" layoutY="100.0" prefHeight="32.0" prefWidth="213.0" promptText="username" />
         <Button fx:id="saveButton" focusTraversable="false" layoutX="226.0" layoutY="100.0" mnemonicParsing="false" onAction="#onSaveButtonClicked" prefHeight="32.0" prefWidth="60.0" text="Save" />
         <Label focusTraversable="false" layoutX="14.0" layoutY="75.0" text="Save?" />
     </children>

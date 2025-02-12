@@ -1,4 +1,3 @@
-
 package htl.steyr.klichtl_minesweeper;
 
 import javafx.animation.KeyFrame;
@@ -32,9 +31,9 @@ public class GameController {
     @FXML
     public Button switch_to_Menu_Button;
 
-    public int ROWS;
-    public int COLS;
-    public int MINES;
+    public int rows;
+    public int cols;
+    public int mines;
     public int fieldsMarked = 0;
     public int secondsElapsed = 0;
 
@@ -49,7 +48,7 @@ public class GameController {
 
     /* Hashmap to store the different Settings appropriate to the Difficulty */
     public HashMap<String, DifficultySettings> difficultys = new HashMap<>() {{
-        put("Beginner", new DifficultySettings(6, 10, 15));
+        put("Beginner", new DifficultySettings(6, 10, 2));
         put("Advanced", new DifficultySettings(15, 25, 35));
         put("Professional", new DifficultySettings(18, 30, 120));
     }};
@@ -86,8 +85,8 @@ public class GameController {
         setEvenSize();
         setFieldsMarked(0);
 
-        for (int col = 0; col < COLS; ++col) {
-            for (int row = 0; row < ROWS; ++row) {
+        for (int col = 0; col < cols; ++col) {
+            for (int row = 0; row < rows; ++row) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("button-view.fxml"));
                 Pane buttonPane = loader.load();
                 buttonController = loader.getController();
@@ -150,7 +149,7 @@ public class GameController {
         }
         for (int col = (-1); col <= 1; ++col) {
             for (int row = (-1); row <= 1; ++row) {
-                if (COL + col >= 0 && COL + col < COLS && ROW + row >= 0 && ROW + row < ROWS) {
+                if (COL + col >= 0 && COL + col < cols && ROW + row >= 0 && ROW + row < rows) {
                     buttonController = getController(COL + col, ROW + row);
                     if (buttonController != null && !buttonController.isRevealed() && !buttonController.isMine()) {
                         buttonController.reveal();
@@ -172,8 +171,8 @@ public class GameController {
      * In this Methode, all fields are revealed.
      */
     public void revealAllFields() {
-        for (int col = 0; col < COLS; ++col) {
-            for (int row = 0; row < ROWS; ++row) {
+        for (int col = 0; col < cols; ++col) {
+            for (int row = 0; row < rows; ++row) {
                 buttonController = getController(col, row);
                 if (buttonController != null && !buttonController.isRevealed()) {
                     buttonController.reveal();
@@ -204,7 +203,7 @@ public class GameController {
         /* exclude the neighbor fields */
         for (int col = -1; col <= 1; col++) {
             for (int row = -1; row <= 1; row++) {
-                if (firstClickCol + col >= 0 && firstClickCol + col < COLS && firstClickRow + row >= 0 && firstClickRow + row < ROWS) {
+                if (firstClickCol + col >= 0 && firstClickCol + col < cols && firstClickRow + row >= 0 && firstClickRow + row < rows) {
                     excludedCoords.add((firstClickCol + col) + "," + (firstClickRow + row));
                 }
             }
@@ -213,9 +212,9 @@ public class GameController {
         excludedCoords.add(firstClickCol + "," + firstClickRow);
 
         /* place the mines excluding the neighbor fields after clicking the first button */
-        while (mineCount < MINES) {
-            int randomCOL = random.nextInt(COLS);
-            int randomROW = random.nextInt(ROWS);
+        while (mineCount < mines) {
+            int randomCOL = random.nextInt(cols);
+            int randomROW = random.nextInt(rows);
 
             String coordinates = randomCOL + "," + randomROW;
 
@@ -230,8 +229,8 @@ public class GameController {
         }
 
         /* set the value of mines nearby */
-        for (int col = 0; col < COLS; col++) {
-            for (int row = 0; row < ROWS; row++) {
+        for (int col = 0; col < cols; col++) {
+            for (int row = 0; row < rows; row++) {
                 ButtonController buttonController = getController(col, row);
                 if (buttonController != null) {
                     buttonController.setMines_Nearby(getMines_Near_Position(col, row));
@@ -304,8 +303,8 @@ public class GameController {
         boolean allNonMinesRevealed = true;
         boolean allMinesMarked = true;
 
-        for (int col = 0; col < COLS; col++) {
-            for (int row = 0; row < ROWS; row++) {
+        for (int col = 0; col < cols; col++) {
+            for (int row = 0; row < rows; row++) {
                 ButtonController buttonController = getController(col, row);
 
                 if (buttonController != null) {
@@ -368,9 +367,9 @@ public class GameController {
         DifficultySettings settings = difficultys.get(difficulty);
         this.currentDifficulty = difficulty;
         if (settings != null) {
-            ROWS = settings.getROWS();
-            COLS = settings.getCOLS();
-            MINES = settings.getMINES();
+            rows = settings.getROWS();
+            cols = settings.getCOLS();
+            mines = settings.getMINES();
         } else {
             throw new IllegalArgumentException("Error loading Difficulty");
         }
@@ -383,15 +382,15 @@ public class GameController {
      * and deviding that with the amount of Rows/Cols.
      */
     public void setEvenSize() {
-        for (int row = 0; row < ROWS; row++) {
+        for (int row = 0; row < rows; row++) {
             RowConstraints rowConstraints = new RowConstraints();
-            rowConstraints.setPercentHeight(100.0 / ROWS);
+            rowConstraints.setPercentHeight(100.0 / rows);
             Grid.getRowConstraints().add(rowConstraints);
         }
 
-        for (int col = 0; col < COLS; col++) {
+        for (int col = 0; col < cols; col++) {
             ColumnConstraints colConstraints = new ColumnConstraints();
-            colConstraints.setPercentWidth(100.0 / COLS);
+            colConstraints.setPercentWidth(100.0 / cols);
             Grid.getColumnConstraints().add(colConstraints);
         }
     }
@@ -408,7 +407,7 @@ public class GameController {
     public void setFieldsMarked(int fieldsMarked) {
         this.fieldsMarked = fieldsMarked;
         /* update the TExtField */
-        MinesRemaining.setText("Flags remaining: " + (MINES - fieldsMarked));
+        MinesRemaining.setText("Flags remaining: " + (mines - fieldsMarked));
     }
 
     /**

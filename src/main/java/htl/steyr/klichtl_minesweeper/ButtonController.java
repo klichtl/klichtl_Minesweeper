@@ -50,7 +50,7 @@ public class ButtonController implements Initializable {
     public void buttonClicked(MouseEvent mouseEvent) {
         if (mouseEvent != null) {
             if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-                if (!is_Marked && controller.getFieldsMarked() < controller.MINES) {
+                if (!is_Marked && controller.getFieldsMarked() < controller.mines) {
                     is_Marked = true;
                     button.setText("🚩");
                     controller.setFieldsMarked(controller.getFieldsMarked() + 1);

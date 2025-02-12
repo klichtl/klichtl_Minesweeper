@@ -1,5 +1,6 @@
 package htl.steyr.klichtl_minesweeper;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -18,7 +19,7 @@ public class GameOverController {
     @FXML
     public Label timeLabel;
     @FXML
-    public TextField username;
+    public TextField usernameText;
     @FXML
     public Button saveButton;
 
@@ -31,9 +32,9 @@ public class GameOverController {
      * In this Methode, the text of the different Labels is set depending on the status of the game.
      * If the player has lost, he is not able to save his record.
      *
-     * @param won boolean to see if the player has won or not won
+     * @param won         boolean to see if the player has won or not won
      * @param timeElapsed the time that was elapsed since the game was started
-     * @param difficulty the difficulty that was selected
+     * @param difficulty  the difficulty that was selected
      */
     public void setGameResult(boolean won, int timeElapsed, String difficulty) {
         this.timeElapsed = timeElapsed;
@@ -42,7 +43,7 @@ public class GameOverController {
         } else {
             resultLabel.setText("You Lost");
             saveButton.setDisable(true);
-            username.setDisable(true);
+            usernameText.setDisable(true);
         }
         timeLabel.setText("Time Elapsed: " + timeElapsed + "s");
         this.difficulty = difficulty;
@@ -57,10 +58,11 @@ public class GameOverController {
      *
      * @param actionEvent the Save-Button
      */
-    public void onSaveButtonClicked(javafx.event.ActionEvent actionEvent) {
-        String user = username.getText().trim();
-        if (!user.isEmpty()) {
-            writeGameResultToFile(user, timeElapsed);
+    public void onSaveButtonClicked(ActionEvent actionEvent) {
+        String username = usernameText.getText().trim();
+        if (!username.isEmpty()) {
+            User user = new User(username, timeElapsed, difficulty);
+            writeGameResultToFile(user);
         } else {
             System.out.println("Please enter a username!");
         }
@@ -74,17 +76,21 @@ public class GameOverController {
      * <p>
      * In this Methode, the username, time, and difficulty is written into the "game-results.csv".
      *
-     * @param username the username the user has chosen
-     * @param timeElapsed the time that is elapsed since the beginning of the game
+     * @param user User Object with the needed data
      */
-    private void writeGameResultToFile(String username, int timeElapsed) {
+    private void writeGameResultToFile(User user) {
 
         File file = new File("game_results.csv");
 
         try {
             FileWriter writer = new FileWriter(file, true);
 
-            writer.write(username + ";" + timeElapsed + ";" + difficulty + "\n");
+            StringBuilder dataForTable = new StringBuilder();
+            dataForTable.append(user.getUsername()).append(";")
+                    .append(user.getTime()).append(";")
+                    .append(user.getDifficulty());
+            writer.write(dataForTable.toString() + "\n");
+
             writer.close();
         } catch (IOException e) {
             System.out.println("Error saving...");

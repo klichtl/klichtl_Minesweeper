@@ -1,3 +1,2 @@
-1. Save the time localy, that was achieved per difficulty maybe a rank system via highscore
-
-2. function comments / comments in general
+3. highscore system on the menu-view, store local highscore (difficulty,name & Time) -> only if won // zu schwa
+4. Target Ordner löschen
