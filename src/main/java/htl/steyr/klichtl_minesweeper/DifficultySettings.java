@@ -2,37 +2,37 @@ package htl.steyr.klichtl_minesweeper;
 
 public class DifficultySettings {
 
-    public int ROWS;
-    public int COLS;
-    public int MINES;
+    private int rows;
+    private int cols;
+    private int mines;
 
-    public DifficultySettings(int ROWS, int COLS, int MINES) {
-        setROWS(ROWS);
-        setCOLS(COLS);
-        setMINES(MINES);
+    public DifficultySettings(int rows, int cols, int mines) {
+        setRows(rows);
+        setCols(cols);
+        setMines(mines);
     }
 
-    public int getMINES() {
-        return MINES;
+    public int getMines() {
+        return mines;
     }
 
-    public int getCOLS() {
-        return COLS;
+    public int getCols() {
+        return cols;
     }
 
-    public int getROWS() {
-        return ROWS;
+    public int getRows() {
+        return rows;
     }
 
-    public void setROWS(int ROWS) {
-        this.ROWS = ROWS;
+    public void setRows(int rows) {
+        this.rows = rows;
     }
 
-    public void setCOLS(int COLS) {
-        this.COLS = COLS;
+    public void setCols(int cols) {
+        this.cols = cols;
     }
 
-    public void setMINES(int MINES) {
-        this.MINES = MINES;
+    public void setMines(int mines) {
+        this.mines = mines;
     }
 }

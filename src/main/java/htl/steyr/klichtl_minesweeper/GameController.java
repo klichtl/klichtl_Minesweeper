@@ -48,7 +48,7 @@ public class GameController {
 
     /* Hashmap to store the different Settings appropriate to the Difficulty */
     public HashMap<String, DifficultySettings> difficultys = new HashMap<>() {{
-        put("Beginner", new DifficultySettings(6, 10, 2));
+        put("Beginner", new DifficultySettings(9, 15, 20));
         put("Advanced", new DifficultySettings(15, 25, 35));
         put("Professional", new DifficultySettings(18, 30, 120));
     }};
@@ -73,7 +73,7 @@ public class GameController {
      */
     @FXML
     public void onStartButtonClicked() throws IOException {
-        // Reset the game state and UI
+        /* Reset the game state and UI */
         Grid.getChildren().clear();
         Grid.getRowConstraints().clear();
         Grid.getColumnConstraints().clear();
@@ -176,6 +176,13 @@ public class GameController {
                 buttonController = getController(col, row);
                 if (buttonController != null && !buttonController.isRevealed()) {
                     buttonController.reveal();
+                }
+                /* If the field that was marked, was actually a mine, the button turns green */
+                /* If the field that was marked, was not a mine, the button turns red */
+                if (buttonController.is_Marked && buttonController.isMine()) {
+                    buttonController.button.setStyle("-fx-background-color: green");
+                } else if (buttonController.is_Marked && !buttonController.isMine()) {
+                    buttonController.button.setStyle("-fx-background-color: red");
                 }
             }
         }
@@ -348,7 +355,7 @@ public class GameController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Game-Over");
-            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Minesweeper-Icon.png"))));
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/general/Minesweeper-Icon.png"))));
             stage.show();
         } catch (IOException e) {
             System.out.println("Game-over-view could not be found");
@@ -367,9 +374,9 @@ public class GameController {
         DifficultySettings settings = difficultys.get(difficulty);
         this.currentDifficulty = difficulty;
         if (settings != null) {
-            rows = settings.getROWS();
-            cols = settings.getCOLS();
-            mines = settings.getMINES();
+            rows = settings.getRows();
+            cols = settings.getCols();
+            mines = settings.getMines();
         } else {
             throw new IllegalArgumentException("Error loading Difficulty");
         }

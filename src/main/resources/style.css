@@ -12,7 +12,3 @@
     -fx-border-width: 1px;
     -fx-background-color: rgba(169, 169, 169, 0.7);
 }
-
-.recordTable {
-    -fx-background-color: invisible;
-}
