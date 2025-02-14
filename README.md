@@ -50,7 +50,7 @@ The game ends when either all non-mined fields are revealed or a mine is trigger
     </p>
 
 3. Win Conditions
-    + The game is won if you have revealed all non-mine fields and marked all mine fields.
+    + The game is won if you have revealed all non-mine fields and marked all mine-fields.
 
     <p align="left">
       <img alt="game-won.png" height="300" width="550" src="src/main/resources/images/README-images/game-won.png"/>
