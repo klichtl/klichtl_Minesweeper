@@ -28,7 +28,7 @@ public class ButtonController implements Initializable {
     /**
      * Description for the initialize method:
      * <p>
-     * In this Methode, the info_ & mine_Label are set to be not visible, this will change later on...
+     * In this Methode, the info_ and mine_Label are set to be not visible, this will change later on...
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
